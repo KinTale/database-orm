@@ -14,21 +14,34 @@ model Customer {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   contact   Contact?
+  ticket    Ticket[]
 }
 
 model Contact {
   id         Int      @id @default(autoincrement())
-  customer   Customer @relation(fields: [customerId], references: [id])
   customerId Int      @unique
+  customer   Customer @relation(fields: [customerId], references: [id])
   phone      Int
   email      String
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 }
 
+model Ticket {
+  id             Int       @id @default(autoincrement())
+  customerID     Int
+  customer       Customer  @relation(fields: [customerID], references: [id])
+  movieName      String
+  movieStartTime DateTime
+  screenNumber   Int
+  movie          Screening @relation(fields: [movieName, movieStartTime, screenNumber], references: [movieName, startsAt, screenNumber])
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+}
+
 model Movie {
   id          Int         @id @default(autoincrement())
-  title       String
+  title       String      @unique
   runtimeMins Int
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
@@ -36,10 +49,23 @@ model Movie {
 }
 
 model Screening {
-  id        Int      @id @default(autoincrement())
-  movie     Movie    @relation(fields: [movieId], references: [id])
-  movieId   Int      @unique
-  startsAt  DateTime
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  //id        Int      @id @default(autoincrement())
+  movieName    String   @unique
+  movie        Movie    @relation(fields: [movieName], references: [title])
+  screenNumber Int      
+  screen       Screen   @relation(fields: [screenNumber], references: [number])
+  startsAt     DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  Ticket       Ticket[]
+
+  @@id([movieName, startsAt, screenNumber])
+}
+
+model Screen {
+  id        Int         @id @default(autoincrement())
+  number    Int         @unique
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  screening Screening[]
 }
