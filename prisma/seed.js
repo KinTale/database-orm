@@ -7,20 +7,39 @@ async function seed() {
         data: {
             name: "Alice",
             contact: {
-              create: {
-                phone: 0999955599,
-                email: "email@email.com",
-              },
+                create: {
+                    phone: 0999955599,
+                    email: "email@email.com",
+                },
             },
-          },
-          include: {
+        },
+        include: {
             contact: true,
-          },
-        });
-      
+        },
+    });
+
     console.log('Customer created', createdCustomer);
 
-    
+    const createdMovie = await prisma.movie.create({
+        data: {
+            title: 'Titanic',
+            runtimeMins: 180,
+            Screening: {
+                create: {
+                    startsAt: new Date(1998, 0, 23, 10, 05, 0, 0)
+                }
+            }
+        },
+        include: {
+            Screening: true
+        }
+
+    })
+
+
+    console.log('add movie', createdMovie)
+
+
     // Don't edit any of the code below this line
     process.exit(0);
 }
