@@ -70,20 +70,19 @@ async function seed() {
     console.log('add movie', createdMovie2)
 
     const createTicket = await prisma.ticket.create({
-		data: {
-			movie: {
-				connect: {
-					movieName: createdMovie2.title
-                 
-				},
-			},
-			customer: {
-				connect: {
-					id: createdCustomer.id,
-				},
-			},
-		},
-	});
+        data: {
+            movie: {
+                connect: {
+                    movieName: createdMovie2.title
+                },
+            },
+            customer: {
+                connect: {
+                    id: createdCustomer.id,
+                },
+            },
+        },
+    });
     console.log('TICKET', createTicket)
     // Don't edit any of the code below this line
     process.exit(0);
